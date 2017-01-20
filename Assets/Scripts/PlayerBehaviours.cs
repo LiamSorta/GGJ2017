@@ -7,11 +7,14 @@ public class PlayerBehaviours : MonoBehaviour {
     public GameObject[] SpawnPoints;
     string PlayerCommand;
     int health;
+    bool Stance;
 
     // Use this for initialization
     void Start() {
+        health = GameMaster.Health;
         transform.position = SpawnPoints[PlayerColour].transform.position;
         PlayerCommand = "Player " + PlayerColour.ToString() + " ";
+        Stance = false;
     }
 
     // Update is called once per frame
@@ -32,11 +35,31 @@ public class PlayerBehaviours : MonoBehaviour {
 
     void SwitchStance()
     {
- 
+        if (Stance)
+        {
+            Stance = false;
+        }
+        else
+        {
+            Stance = true;
+        }
     }
 
     void SendEnemyToPlayer(int i)
     {
 
+    }
+
+    void OnTrigger2DEnter(Collider2D col)
+    {
+        EnemyScript ScriptOnCol = col.gameObject.GetComponent<EnemyScript>();
+        if (Stance == ScriptOnCol.GetStance())
+        {
+            ScriptOnCol.DIE();
+        }
+        else
+        {
+            health -= GameMaster.HealthStep;
+        }
     }
 }
