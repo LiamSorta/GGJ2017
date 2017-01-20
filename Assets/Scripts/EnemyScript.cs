@@ -32,4 +32,9 @@ public class EnemyScript : MonoBehaviour {
     {
         return Stance;
     }
+
+    public void SetColor(Color32 colour)
+    {
+
+    }
 }

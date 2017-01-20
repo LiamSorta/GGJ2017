@@ -8,10 +8,11 @@ public class PlayerBehaviours : MonoBehaviour {
     string PlayerCommand;
     int health;
     bool Stance;
+    GameMaster GM;
 
     // Use this for initialization
     void Start() {
-        health = GameMaster.Health;
+        health = GM.GetHealth();
         transform.position = SpawnPoints[PlayerColour].transform.position;
         PlayerCommand = "Player " + PlayerColour.ToString() + " ";
         Stance = false;
@@ -26,10 +27,18 @@ public class PlayerBehaviours : MonoBehaviour {
         }
         for (int i = 0; i < SpawnPoints.Length; i++)
         {
-            if (Input.GetButton(PlayerCommand + "Attack Player " + i)) 
+            try
             {
-                SendEnemyToPlayer(i);
+                if (Input.GetButton(PlayerCommand + "Attack Player " + i))
+                {
+                    SendEnemyToPlayer(i);
+                }
             }
+            catch
+            {
+                //Will fail once per player
+            }
+            
         }
     }
 
@@ -59,7 +68,7 @@ public class PlayerBehaviours : MonoBehaviour {
         }
         else
         {
-            health -= GameMaster.HealthStep;
+            health -= GM.GetHealthStep();
         }
     }
 }
