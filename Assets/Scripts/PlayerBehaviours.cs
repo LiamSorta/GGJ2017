@@ -23,7 +23,7 @@ public class PlayerBehaviours : MonoBehaviour {
         }
         for (int i = 0; i < SpawnPoints.Length; i++)
         {
-            if (Input.GetButton(PlayerCommand + "Attack Player" + i)) 
+            if (Input.GetButton(PlayerCommand + "Attack Player " + i)) 
             {
                 SendEnemyToPlayer(i);
             }
