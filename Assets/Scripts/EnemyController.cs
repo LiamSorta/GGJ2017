@@ -5,22 +5,35 @@ using System.Collections.Generic;
 public class EnemyController : MonoBehaviour {
 
     [SerializeField]
-    GameObject enemy, enemy2;
+    GameObject enemyPrefab;
 
     [SerializeField]
     GameMaster gm;
     
     [SerializeField]
-    Player[] players;
-    
+    PlayerBehaviours[] players;
+
+    float lastSpawn;
+
+    void Start()
+    {
+        gm = GameObject.FindObjectOfType<GameMaster>();
+        lastSpawn = Time.time;
+    }
     void FixedUpdate() {
-        for (int i = 0; i < players.Length; i++) {
-            players[i].SpawnEnemy();
+        if (lastSpawn + gm.GetSpawnTime() < Time.time)
+        {
+            lastSpawn = Time.time;
+            for (int i = 0; i < players.Length; i++)
+            {
+                players[i].SpawnEnemy();
+            }
         }
     }
 
-    void SpawnEnemy(int lane, Color32 colour) {
-        Enemy enemy = Instantiate(enemy, Mathf.Abs(gm.GetLanes(lane).transform.position.x), Quaternion.identity) as Enemy;
-        enemy.SetColor(colour);
+    public void SpawnEnemy(byte PlayerColour) {
+        Vector3 pos = gm.SpawnPoints[PlayerColour].transform.position;
+        EnemyScript enemy = Instantiate(enemyPrefab, new Vector3(Mathf.Abs(pos.x), pos.y, pos.z), Quaternion.identity) as EnemyScript;
+        enemy.SetColor(gm.Colours[PlayerColour]);
     }
 }

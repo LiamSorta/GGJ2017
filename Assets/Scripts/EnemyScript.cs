@@ -4,9 +4,11 @@ using System.Collections;
 public class EnemyScript : MonoBehaviour {
 
     bool Stance;
+    GameMaster GM;
 
 	// Use this for initialization
 	void Start () {
+        GM = GameObject.FindObjectOfType<GameMaster>();
         int value = Random.Range(0, 100);
         if (value >= 50)
         {
@@ -20,7 +22,7 @@ public class EnemyScript : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        transform.Translate(-Vector3.right * EnemyController.Speed * Time.deltaTime);
+        transform.Translate(-Vector3.right * GM.GetSpeed() * Time.deltaTime);
 	}
 
     public void DIE()

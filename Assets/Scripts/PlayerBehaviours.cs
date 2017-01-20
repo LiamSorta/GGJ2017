@@ -1,21 +1,39 @@
 ﻿using UnityEngine;
 using System.Collections;
-
+using System.Collections.Generic;
 public class PlayerBehaviours : MonoBehaviour {
 
     public byte PlayerColour;
-    public GameObject[] SpawnPoints;
     string PlayerCommand;
     int health;
     bool Stance;
     GameMaster GM;
 
+    public List<EnemyScript> LPEnemies;
+    public List<EnemyScript> HPEnemies;
+
     // Use this for initialization
     void Start() {
-        health = GM.GetHealth();
-        transform.position = SpawnPoints[PlayerColour].transform.position;
         PlayerCommand = "Player " + PlayerColour.ToString() + " ";
+        GM = GameObject.FindObjectOfType<GameMaster>();
+        health = GM.GetHealth();
+        transform.position = GM.SpawnPoints[PlayerColour].transform.position;
         Stance = false;
+    }
+
+
+    public void SpawnEnemy()
+    {
+        if(HPEnemies.Count > 0)
+        {
+            GM.enemyCon.SpawnEnemy(PlayerColour);
+            HPEnemies.RemoveAt(0);
+        }
+        else if (LPEnemies.Count > 0)
+        {
+            GM.enemyCon.SpawnEnemy(PlayerColour);
+            LPEnemies.RemoveAt(0);
+        }
     }
 
     // Update is called once per frame
@@ -25,7 +43,7 @@ public class PlayerBehaviours : MonoBehaviour {
         {
             SwitchStance();
         }
-        for (int i = 0; i < SpawnPoints.Length; i++)
+        for (int i = 0; i < GM.SpawnPoints.Length; i++)
         {
             try
             {
