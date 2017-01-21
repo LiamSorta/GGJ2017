@@ -5,6 +5,7 @@ public class EnemyScript : MonoBehaviour {
 
     bool Stance;
     GameMaster GM;
+    public Sprite[] sprites;
 
 	// Use this for initialization
 	void Start () {
@@ -13,16 +14,18 @@ public class EnemyScript : MonoBehaviour {
         if (value >= 50)
         {
             Stance = false;
+            GetComponent<SpriteRenderer>().sprite = sprites[0];
         }
         else
         {
             Stance = true;
+            GetComponent<SpriteRenderer>().sprite = sprites[1];
         }
 	}
 	
 	// Update is called once per frame
-	void Update () {
-        transform.Translate(-Vector3.right * GM.GetSpeed() * Time.deltaTime);
+	void FixedUpdate () {
+        transform.Translate(-Vector3.right * GM.GetSpeed());
 	}
 
     public void DIE()

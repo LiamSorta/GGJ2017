@@ -8,12 +8,21 @@ public class PlayerBehaviours : MonoBehaviour {
     int health;
     bool Stance;
     GameMaster GM;
+    int count = 0;
+    Transform Child;
+    float toggleCD = 0;
+    SpriteRenderer SpRenderer;
+    ShieldFade ChildFade;
 
     public List<byte> LPEnemies;
     public List<bool> HPEnemies;
 
     // Use this for initialization
     void Start() {
+        SpRenderer = gameObject.GetComponent<SpriteRenderer>();
+        SpRenderer.sortingOrder = 1;
+        Child = transform.GetChild(0);
+        ChildFade =  Child.gameObject.GetComponent<ShieldFade>();
         PlayerCommand = "Player " + PlayerColour.ToString() + " ";
         GM = GameObject.FindObjectOfType<GameMaster>();
         health = GM.GetHealth();
@@ -39,10 +48,13 @@ public class PlayerBehaviours : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetButton(PlayerCommand + "Toggle"))
+        if (toggleCD < Time.time && (Input.GetButton(PlayerCommand + "Toggle")||Input.GetKeyDown(KeyCode.Space)))
         {
+            toggleCD = Time.time + 0.3f; 
+            Debug.Log(Stance);
             SwitchStance();
         }
+
         for (int i = 0; i < GM.SpawnPoints.Length; i++)
         {
             try
@@ -62,13 +74,15 @@ public class PlayerBehaviours : MonoBehaviour {
 
     void SwitchStance()
     {
+        Stance = !Stance;
+        ChildFade.Live(Stance);
         if (Stance)
         {
-            Stance = false;
+            SpRenderer.sortingOrder = 20;
         }
         else
         {
-            Stance = true;
+            SpRenderer.sortingOrder = 0;
         }
     }
 
@@ -77,7 +91,7 @@ public class PlayerBehaviours : MonoBehaviour {
         GM.Players[i].LPEnemies.Add(PlayerColour);
     }
 
-    void OnTrigger2DEnter(Collider2D col)
+    void OnTriggerEnter2D(Collider2D col)
     {
         EnemyScript ScriptOnCol = col.gameObject.GetComponent<EnemyScript>();
         if (Stance == ScriptOnCol.GetStance())
@@ -87,6 +101,7 @@ public class PlayerBehaviours : MonoBehaviour {
         else
         {
             health -= GM.GetHealthStep();
+            //ScriptOnCol.DIE();
         }
     }
 
