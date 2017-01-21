@@ -47,14 +47,12 @@ public class ShieldFade : MonoBehaviour {
         if (isInUse)
         {
 
-            Debug.Log("BOOP");
             transform.localPosition = crotchPos;
             transform.localScale = new Vector3(1,1,1);
             SpRenderer.sortingOrder = 40;
         }
         else
         {
-            Debug.Log(crotchPos.x);
             transform.localPosition = bumPos;
             transform.localScale = new Vector3(-1, 1, 1);
             SpRenderer.sortingOrder = -40;

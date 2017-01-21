@@ -6,20 +6,26 @@ public class EnemyScript : MonoBehaviour {
     bool Stance;
     GameMaster GM;
     public Sprite[] sprites;
+    SpriteRenderer sr;
+    // Use this for initialization
 
-	// Use this for initialization
-	void Start () {
+        void Awake()
+    {
+        sr = GetComponent<SpriteRenderer>();
+
+    }
+    void Start () {
         GM = GameObject.FindObjectOfType<GameMaster>();
         int value = Random.Range(0, 100);
         if (value >= 50)
         {
             Stance = false;
-            GetComponent<SpriteRenderer>().sprite = sprites[0];
+            sr.sprite = sprites[0];
         }
         else
         {
             Stance = true;
-            GetComponent<SpriteRenderer>().sprite = sprites[1];
+            sr.sprite = sprites[1];
         }
 	}
 	
@@ -40,6 +46,6 @@ public class EnemyScript : MonoBehaviour {
 
     public void SetColor(Color32 colour)
     {
-
+        sr.color = colour;
     }
 }

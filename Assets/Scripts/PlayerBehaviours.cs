@@ -21,6 +21,7 @@ public class PlayerBehaviours : MonoBehaviour {
 
     public List<byte> LPEnemies;
     public List<bool> HPEnemies;
+    int StoredEnemies = 0;
 
     // Use this for initialization
     void Start() {
@@ -59,7 +60,7 @@ public class PlayerBehaviours : MonoBehaviour {
         }
         if (!Dead)
         {
-            if(neutAdd + .3f < Time.time)
+            if(neutAdd + 3f < Time.time)
             {
                 neutAdd = Time.time;
                 HPEnemies.Add(true);
@@ -71,7 +72,7 @@ public class PlayerBehaviours : MonoBehaviour {
             if (toggleCD < Time.time && (Input.GetButton(PlayerCommand + "Toggle") || Input.GetKeyDown(KeyCode.Space)))
             {
                 toggleCD = Time.time + 0.3f;
-                Debug.Log(Stance);
+
                 SwitchStance();
             }
 
@@ -81,7 +82,10 @@ public class PlayerBehaviours : MonoBehaviour {
                 {
                     if (Input.GetButton(PlayerCommand + "Attack Player " + i))
                     {
-                        SendEnemyToPlayer(i);
+                        if (StoredEnemies > 0)
+                        {
+                            SendEnemyToPlayer(i);
+                        }
                     }
                 }
                 catch
@@ -116,6 +120,7 @@ public class PlayerBehaviours : MonoBehaviour {
     void SendEnemyToPlayer(int i)
     {
         GM.Players[i].LPEnemies.Add(PlayerColour);
+        StoredEnemies--;
     }
 
     void OnTriggerEnter2D(Collider2D col)
@@ -123,6 +128,7 @@ public class PlayerBehaviours : MonoBehaviour {
         EnemyScript ScriptOnCol = col.gameObject.GetComponent<EnemyScript>();
         if (Stance == ScriptOnCol.GetStance())
         {
+            StoredEnemies++;
             GM.Warnings[PlayerColour].color = Color.green;
             GM.Warnings[PlayerColour].enabled = true;
             colorTime = Time.time;
