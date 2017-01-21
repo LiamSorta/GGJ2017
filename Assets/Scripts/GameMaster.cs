@@ -8,11 +8,11 @@ public class GameMaster :MonoBehaviour{
     public static GameMaster instance = null;
     int Health = 100;
     int HealthStep = 10;
-    float SpawnTime = 1f;
+    float SpawnTime = 0.4f;
     public EnemyController enemyCon;
     public GameObject[] SpawnPoints;
     public Color32[] Colours;
-    float Speed = 0.12f;
+    float Speed = 0.1f;
     public PlayerBehaviours[] Players;
     public GameObject[] PlayerPrefabs;
     public SpriteRenderer[] Warnings;

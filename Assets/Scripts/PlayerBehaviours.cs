@@ -25,11 +25,12 @@ public class PlayerBehaviours : MonoBehaviour {
     int StoredEnemies = 0;
     AudioClip SelectedTrack;
     AudioSource MPlayer;
+    Animator Anim;
 
     // Use this for initialization
     void Start() {
         MPlayer = GetComponent<AudioSource>();
-        
+        Anim = GetComponent<Animator>();
         SpRenderer = gameObject.GetComponent<SpriteRenderer>();
         SpRenderer.sortingOrder = 1;
         Child = transform.GetChild(0);
@@ -74,7 +75,7 @@ public class PlayerBehaviours : MonoBehaviour {
             GM.HealthTexts[PlayerColour].text = health.ToString();
             MPlayer.volume = (0.5f * (health / 100f));
 
-            if(neutAdd + 3f < Time.time)
+            if(neutAdd + Mathf.Clamp((3f-Time.time/40),3f,3f) < Time.time)
             {
                 neutAdd = Time.time;
                 HPEnemies.Add(true);
@@ -83,7 +84,7 @@ public class PlayerBehaviours : MonoBehaviour {
             {
                 Dead = true;
             }
-            if (toggleCD < Time.time && (Input.GetButton(PlayerCommand + "Toggle") || Input.GetKeyDown(KeyCode.Space)))
+            if (toggleCD < Time.time && (Input.GetButton(PlayerCommand + "Toggle")))
             {
                 toggleCD = Time.time + 0.3f;
 
@@ -124,10 +125,12 @@ public class PlayerBehaviours : MonoBehaviour {
         ChildFade.Live(Stance);
         if (Stance)
         {
+            Anim.SetBool("StanceSwitch", false);
             SpRenderer.sortingOrder = 20;
         }
         else
         {
+            Anim.SetBool("StanceSwitch", true);
             SpRenderer.sortingOrder = 0;
         }
     }

@@ -20,18 +20,19 @@ public class EnemyScript : MonoBehaviour {
         if (value >= 50)
         {
             Stance = false;
-            sr.sprite = sprites[0];
+            sr.sprite = sprites[1];
         }
         else
         {
             Stance = true;
-            sr.sprite = sprites[1];
+            sr.sprite = sprites[0];
         }
 	}
 	
 	// Update is called once per frame
 	void FixedUpdate () {
         transform.Translate(-Vector3.right * GM.GetSpeed());
+
 	}
 
     public void DIE()
