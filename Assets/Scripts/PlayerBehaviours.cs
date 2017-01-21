@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 public class PlayerBehaviours : MonoBehaviour {
 
     byte PlayerColour;
@@ -22,9 +23,13 @@ public class PlayerBehaviours : MonoBehaviour {
     public List<byte> LPEnemies;
     public List<bool> HPEnemies;
     int StoredEnemies = 0;
+    AudioClip SelectedTrack;
+    AudioSource MPlayer;
 
     // Use this for initialization
     void Start() {
+        MPlayer = GetComponent<AudioSource>();
+        
         SpRenderer = gameObject.GetComponent<SpriteRenderer>();
         SpRenderer.sortingOrder = 1;
         Child = transform.GetChild(0);
@@ -34,6 +39,10 @@ public class PlayerBehaviours : MonoBehaviour {
         health = GM.GetHealth();
         transform.position = GM.SpawnPoints[PlayerColour].transform.position;
         Stance = false;
+        int track = Random.Range(0, GM.Musics.GetLength(0));
+        SelectedTrack = GM.Musics[track];
+        MPlayer.clip = SelectedTrack;
+        MPlayer.Play();
     }
 
 
@@ -60,6 +69,11 @@ public class PlayerBehaviours : MonoBehaviour {
         }
         if (!Dead)
         {
+            GM.StoredTexts[PlayerColour].text = StoredEnemies.ToString();
+            GM.IncomingTexts[PlayerColour].text = (LPEnemies.Count + HPEnemies.Count).ToString();
+            GM.HealthTexts[PlayerColour].text = health.ToString();
+            MPlayer.volume = (0.5f * (health / 100f));
+
             if(neutAdd + 3f < Time.time)
             {
                 neutAdd = Time.time;

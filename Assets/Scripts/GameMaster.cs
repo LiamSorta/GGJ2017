@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class GameMaster :MonoBehaviour{
 
@@ -15,6 +16,10 @@ public class GameMaster :MonoBehaviour{
     public PlayerBehaviours[] Players;
     public GameObject[] PlayerPrefabs;
     public SpriteRenderer[] Warnings;
+    public Text[] StoredTexts;
+    public Text[] IncomingTexts;
+    public Text[] HealthTexts;
+    public AudioClip[] Musics;
     
     void Awake()
     {
