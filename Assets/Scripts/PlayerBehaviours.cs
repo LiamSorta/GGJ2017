@@ -84,6 +84,7 @@ public class PlayerBehaviours : MonoBehaviour {
                     {
                         if (StoredEnemies > 0)
                         {
+                            
                             SendEnemyToPlayer(i);
                         }
                     }

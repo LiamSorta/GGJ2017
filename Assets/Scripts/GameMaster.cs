@@ -13,7 +13,7 @@ public class GameMaster :MonoBehaviour{
     public Color32[] Colours;
     float Speed = 0.12f;
     public PlayerBehaviours[] Players;
-    public GameObject PlayerPrefab;
+    public GameObject[] PlayerPrefabs;
     public SpriteRenderer[] Warnings;
     
     void Awake()
@@ -40,7 +40,7 @@ public class GameMaster :MonoBehaviour{
         Players = new PlayerBehaviours[4];
         for (byte i = 0; i < Players.GetLength(0); i++)
         {
-            GameObject plyer = Instantiate(PlayerPrefab, transform.position, Quaternion.identity) as GameObject;
+            GameObject plyer = Instantiate(PlayerPrefabs[i], transform.position, Quaternion.identity) as GameObject;
             Players[i] = plyer.GetComponent<PlayerBehaviours>();
             Players[i].SetPlayerColour(i);
             
