@@ -3,14 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 public class PlayerBehaviours : MonoBehaviour {
 
-    public byte PlayerColour;
+    byte PlayerColour;
     string PlayerCommand;
     int health;
     bool Stance;
     GameMaster GM;
 
-    public List<EnemyScript> LPEnemies;
-    public List<EnemyScript> HPEnemies;
+    public List<byte> LPEnemies;
+    public List<bool> HPEnemies;
 
     // Use this for initialization
     void Start() {
@@ -24,14 +24,14 @@ public class PlayerBehaviours : MonoBehaviour {
 
     public void SpawnEnemy()
     {
-        if(HPEnemies.Count > 0)
+        if (HPEnemies.Count > 0)
         {
-            GM.enemyCon.SpawnEnemy(PlayerColour);
+            GM.enemyCon.SpawnEnemy(PlayerColour,4);
             HPEnemies.RemoveAt(0);
         }
         else if (LPEnemies.Count > 0)
         {
-            GM.enemyCon.SpawnEnemy(PlayerColour);
+            GM.enemyCon.SpawnEnemy(PlayerColour,LPEnemies[0]);
             LPEnemies.RemoveAt(0);
         }
     }
@@ -74,7 +74,7 @@ public class PlayerBehaviours : MonoBehaviour {
 
     void SendEnemyToPlayer(int i)
     {
-
+        GM.Players[i].LPEnemies.Add(PlayerColour);
     }
 
     void OnTrigger2DEnter(Collider2D col)
@@ -88,5 +88,10 @@ public class PlayerBehaviours : MonoBehaviour {
         {
             health -= GM.GetHealthStep();
         }
+    }
+
+    public void SetPlayerColour(byte i)
+    {
+        PlayerColour = i;
     }
 }

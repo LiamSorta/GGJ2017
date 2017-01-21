@@ -9,11 +9,9 @@ public class EnemyController : MonoBehaviour {
 
     [SerializeField]
     GameMaster gm;
-    
-    [SerializeField]
-    PlayerBehaviours[] players;
 
     float lastSpawn;
+
 
     void Start()
     {
@@ -24,16 +22,21 @@ public class EnemyController : MonoBehaviour {
         if (lastSpawn + gm.GetSpawnTime() < Time.time)
         {
             lastSpawn = Time.time;
-            for (int i = 0; i < players.Length; i++)
+            for (int i = 0; i < gm.Players.Length; i++)
             {
-                players[i].SpawnEnemy();
+                gm.Players[i].SpawnEnemy();
             }
         }
     }
 
-    public void SpawnEnemy(byte PlayerColour) {
+    public void SpawnEnemy(byte PlayerColour,byte SendingPlayer) {
         Vector3 pos = gm.SpawnPoints[PlayerColour].transform.position;
-        EnemyScript enemy = Instantiate(enemyPrefab, new Vector3(Mathf.Abs(pos.x), pos.y, pos.z), Quaternion.identity) as EnemyScript;
-        enemy.SetColor(gm.Colours[PlayerColour]);
+        GameObject enemy = Instantiate(enemyPrefab, new Vector3(Mathf.Abs(pos.x), pos.y, pos.z), Quaternion.identity) as GameObject;
+        enemy.GetComponent<EnemyScript>().SetColor(gm.Colours[SendingPlayer]);
+    }
+
+    void AddToHP(byte i)
+    {
+        gm.Players[i].HPEnemies.Add(false);
     }
 }

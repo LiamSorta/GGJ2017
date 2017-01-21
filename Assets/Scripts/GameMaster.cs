@@ -10,12 +10,14 @@ public class GameMaster :MonoBehaviour{
     float SpawnTime = 5f;
     public EnemyController enemyCon;
     public GameObject[] SpawnPoints;
-    public Color32[] Colours = { new Color32(11, 160, 13, 255), new Color32(214, 6, 6, 255), new Color32(17, 99, 214, 255), new Color32(226, 186, 4, 255) };
+    public Color32[] Colours;
     float Speed = 5f;
+    public PlayerBehaviours[] Players;
+    public GameObject PlayerPrefab;
     
     void Awake()
     {
-        if (instance = null)
+        if (instance == null)
         {
             instance = this;
         }
@@ -25,14 +27,23 @@ public class GameMaster :MonoBehaviour{
         }
         DontDestroyOnLoad(gameObject);
 
-        enemyCon = gameObject.GetComponent<EnemyController>();
+    Colours = new Color32[] { new Color32(11, 160, 13, 255), new Color32(214, 6, 6, 255), new Color32(17, 99, 214, 255), new Color32(226, 186, 4, 255),new Color32(255, 255, 255, 255) };
 
-        InitGame();
+    //enemyCon = gameObject.GetComponent<EnemyController>();
+
+    InitGame();
     }
 
     void InitGame()
     {
-
+        Players = new PlayerBehaviours[4];
+        for (byte i = 0; i < Players.GetLength(0); i++)
+        {
+            GameObject plyer = Instantiate(PlayerPrefab, transform.position, Quaternion.identity) as GameObject;
+            Players[i] = plyer.GetComponent<PlayerBehaviours>();
+            Players[i].SetPlayerColour(i);
+            
+        }
     }
 
     public int GetHealth()
