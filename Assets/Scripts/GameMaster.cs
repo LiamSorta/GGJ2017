@@ -14,6 +14,7 @@ public class GameMaster :MonoBehaviour{
     float Speed = 0.12f;
     public PlayerBehaviours[] Players;
     public GameObject PlayerPrefab;
+    public SpriteRenderer[] Warnings;
     
     void Awake()
     {

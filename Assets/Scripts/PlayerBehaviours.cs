@@ -5,7 +5,7 @@ public class PlayerBehaviours : MonoBehaviour {
 
     byte PlayerColour;
     string PlayerCommand;
-    int health;
+    public int health;
     bool Stance;
     GameMaster GM;
     int count = 0;
@@ -13,6 +13,11 @@ public class PlayerBehaviours : MonoBehaviour {
     float toggleCD = 0;
     SpriteRenderer SpRenderer;
     ShieldFade ChildFade;
+    bool Dead = false;
+
+    float colorTime;
+
+    float neutAdd; 
 
     public List<byte> LPEnemies;
     public List<bool> HPEnemies;
@@ -48,27 +53,49 @@ public class PlayerBehaviours : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        if (toggleCD < Time.time && (Input.GetButton(PlayerCommand + "Toggle")||Input.GetKeyDown(KeyCode.Space)))
+        if (colorTime + 0.25f < Time.time)
         {
-            toggleCD = Time.time + 0.3f; 
-            Debug.Log(Stance);
-            SwitchStance();
+            GM.Warnings[PlayerColour].enabled = false;
         }
-
-        for (int i = 0; i < GM.SpawnPoints.Length; i++)
+        if (!Dead)
         {
-            try
+            if(neutAdd + .3f < Time.time)
             {
-                if (Input.GetButton(PlayerCommand + "Attack Player " + i))
+                neutAdd = Time.time;
+                HPEnemies.Add(true);
+            }
+            if(health <= 0)
+            {
+                Dead = true;
+            }
+            if (toggleCD < Time.time && (Input.GetButton(PlayerCommand + "Toggle") || Input.GetKeyDown(KeyCode.Space)))
+            {
+                toggleCD = Time.time + 0.3f;
+                Debug.Log(Stance);
+                SwitchStance();
+            }
+
+            for (int i = 0; i < GM.SpawnPoints.Length; i++)
+            {
+                try
                 {
-                    SendEnemyToPlayer(i);
+                    if (Input.GetButton(PlayerCommand + "Attack Player " + i))
+                    {
+                        SendEnemyToPlayer(i);
+                    }
                 }
+                catch
+                {
+                    //Will fail once per player
+                }
+
             }
-            catch
-            {
-                //Will fail once per player
-            }
-            
+        }
+        else
+        {
+            SpRenderer.enabled = false;
+            gameObject.GetComponent<Collider2D>().enabled = false;
+            Destroy(gameObject);
         }
     }
 
@@ -96,12 +123,18 @@ public class PlayerBehaviours : MonoBehaviour {
         EnemyScript ScriptOnCol = col.gameObject.GetComponent<EnemyScript>();
         if (Stance == ScriptOnCol.GetStance())
         {
+            GM.Warnings[PlayerColour].color = Color.green;
+            GM.Warnings[PlayerColour].enabled = true;
+            colorTime = Time.time;
             ScriptOnCol.DIE();
         }
         else
         {
+            GM.Warnings[PlayerColour].color = Color.red;
+            GM.Warnings[PlayerColour].enabled = true;
+            colorTime = Time.time;
             health -= GM.GetHealthStep();
-            //ScriptOnCol.DIE();
+            ScriptOnCol.DIE();
         }
     }
 

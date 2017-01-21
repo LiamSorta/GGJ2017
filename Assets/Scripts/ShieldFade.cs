@@ -6,7 +6,7 @@ public class ShieldFade : MonoBehaviour {
     SpriteRenderer SpRenderer;
     Vector3 bumPos;
     Vector3 crotchPos;
-
+    bool coco;
     float flashMe;
 
 	// Use this for initialization
@@ -27,7 +27,11 @@ public class ShieldFade : MonoBehaviour {
     {
         if(flashMe > Time.time)
         {
-            SpRenderer.enabled = !SpRenderer.enabled;
+            if (coco)
+            {
+                SpRenderer.enabled = !SpRenderer.enabled;
+            }
+            coco = !coco;
         }
         else
         {

@@ -19,12 +19,14 @@ public class EnemyController : MonoBehaviour {
         lastSpawn = Time.time;
     }
     void FixedUpdate() {
+        
         if (lastSpawn + gm.GetSpawnTime() < Time.time)
         {
             lastSpawn = Time.time;
             for (int i = 0; i < gm.Players.Length; i++)
             {
-                gm.Players[i].SpawnEnemy();
+                if(gm.Players[i].health > 0)
+                    gm.Players[i].SpawnEnemy();
             }
         }
     }
