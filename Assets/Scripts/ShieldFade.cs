@@ -14,7 +14,7 @@ public class ShieldFade : MonoBehaviour {
 
         SpRenderer = GetComponent<SpriteRenderer>();
         crotchPos = transform.localPosition;
-        bumPos = new Vector3(-crotchPos.x, crotchPos.y, crotchPos.z);
+        bumPos = new Vector3(-0.6f-crotchPos.x, crotchPos.y, crotchPos.z);
         Live(false);
     }
 	
