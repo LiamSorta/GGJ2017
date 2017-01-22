@@ -42,8 +42,8 @@ public class PlayerBehaviours : MonoBehaviour {
         Stance = false;
         int track = Random.Range(0, GM.Musics.GetLength(0));
         SelectedTrack = GM.Musics[track];
-        MPlayer.clip = SelectedTrack;
-        MPlayer.Play();
+        GM.GMPlayer[PlayerColour+1].clip = SelectedTrack;
+        GM.GMPlayer[PlayerColour + 1].Play();
     }
 
 
@@ -73,7 +73,7 @@ public class PlayerBehaviours : MonoBehaviour {
             GM.StoredTexts[PlayerColour].text = StoredEnemies.ToString();
             GM.IncomingTexts[PlayerColour].text = (LPEnemies.Count + HPEnemies.Count).ToString();
             GM.HealthTexts[PlayerColour].text = health.ToString();
-            MPlayer.volume = (0.5f * (health / 100f));
+            GM.GMPlayer[PlayerColour + 1].volume = ((100-health) / 100f);
 
             if(neutAdd + Mathf.Clamp((3f-Time.time/40),3f,3f) < Time.time)
             {
@@ -84,7 +84,7 @@ public class PlayerBehaviours : MonoBehaviour {
             {
                 Dead = true;
             }
-            if (toggleCD < Time.time && (Input.GetButton(PlayerCommand + "Toggle")))
+            if (toggleCD < Time.time && (Input.GetButtonDown(PlayerCommand + "Toggle")))
             {
                 toggleCD = Time.time + 0.3f;
 
@@ -95,7 +95,7 @@ public class PlayerBehaviours : MonoBehaviour {
             {
                 try
                 {
-                    if (Input.GetButton(PlayerCommand + "Attack Player " + i))
+                    if (Input.GetButtonDown(PlayerCommand + "Attack Player " + i))
                     {
                         if (StoredEnemies > 0)
                         {
@@ -113,6 +113,8 @@ public class PlayerBehaviours : MonoBehaviour {
         }
         else
         {
+            GameObject.FindObjectOfType<PlayerManager>().DeadPlayer();
+
             SpRenderer.enabled = false;
             gameObject.GetComponent<Collider2D>().enabled = false;
             Destroy(gameObject);
@@ -125,11 +127,15 @@ public class PlayerBehaviours : MonoBehaviour {
         ChildFade.Live(Stance);
         if (Stance)
         {
+            MPlayer.clip = GM.Swords[Random.Range(0, GM.Swords.GetLength(0))];
+            MPlayer.Play();
             Anim.SetBool("StanceSwitch", false);
             SpRenderer.sortingOrder = 20;
         }
         else
         {
+            MPlayer.clip = GM.Shields[Random.Range(0, GM.Shields.GetLength(0))];
+            MPlayer.Play();
             Anim.SetBool("StanceSwitch", true);
             SpRenderer.sortingOrder = 0;
         }

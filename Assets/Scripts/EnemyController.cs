@@ -25,7 +25,7 @@ public class EnemyController : MonoBehaviour {
             lastSpawn = Time.time;
             for (int i = 0; i < gm.Players.Length; i++)
             {
-                if(gm.Players[i].health > 0)
+                if(gm.Players[i].health > 0 && gm.GetPlaying())
                     gm.Players[i].SpawnEnemy();
             }
         }

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.UI;
 
 public class GameMaster :MonoBehaviour{
@@ -20,24 +21,30 @@ public class GameMaster :MonoBehaviour{
     public Text[] IncomingTexts;
     public Text[] HealthTexts;
     public AudioClip[] Musics;
-    
+    public List<AudioClip> Deaths;
+    public AudioClip[] Swords;
+    public AudioClip[] Shields;
+    bool Playing = true;
+    public AudioSource[] GMPlayer;
+
     void Awake()
     {
         if (instance == null)
         {
             instance = this;
         }
-        else if(instance != this)
+        else if (instance != this)
         {
             Destroy(gameObject);
         }
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
 
-    Colours = new Color32[] { new Color32(11, 160, 13, 255), new Color32(214, 6, 6, 255), new Color32(17, 99, 214, 255), new Color32(226, 186, 4, 255),new Color32(255, 255, 255, 255) };
+        GMPlayer = GetComponents<AudioSource>();
+        Colours = new Color32[] { new Color32(11, 160, 13, 255), new Color32(214, 6, 6, 255), new Color32(17, 99, 214, 255), new Color32(226, 186, 4, 255), new Color32(255, 255, 255, 255) };
 
-    //enemyCon = gameObject.GetComponent<EnemyController>();
+        //enemyCon = gameObject.GetComponent<EnemyController>();
 
-    InitGame();
+        InitGame();
     }
 
     void InitGame()
@@ -70,5 +77,13 @@ public class GameMaster :MonoBehaviour{
     public float GetSpeed()
     {
         return Speed;
+    }
+    public bool GetPlaying()
+    {
+        return Playing;
+    }
+    public void SetPlaying(bool State)
+    {
+        Playing = State;
     }
 }
